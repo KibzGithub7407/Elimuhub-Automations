@@ -1,0 +1,38 @@
+name: Automate Content Creation & Publishing
+
+on:
+  workflow_dispatch:  # Manual trigger
+  schedule:
+    - cron: '0 7 * * 2'  # Every Tuesday at 7:00 UTC
+
+jobs:
+  automate-content:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests openai python-dotenv
+
+      - name: Run content automation script
+        env:
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python scripts/extract_and_generate.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name 'Elimuhub Bot'
+          git config user.email 'bot@elimuhub.com'
+          git add content/posts/*.md
+          git commit -m "Automated blog post update [skip ci]" || echo "No changes to commit"
+          git push
