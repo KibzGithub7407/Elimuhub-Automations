@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SERPER_API_KEY = os.getenv('SERPER_API_KEY')
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+OPENAI_API_KEY = os.getenv('ELIMUHUB_TRENDS_BOT')
 
 query = "Muslim school placement Kenya"  # Replace or automate as needed
 
@@ -22,7 +22,7 @@ summaries = [article.get('snippet', '') for article in top_articles]
 summaries_text = "\n".join(summaries)
 
 # Generate blog post with OpenAI
-openai.api_key = OPENAI_API_KEY
+openai.api_key = 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
 prompt = (
     f"Write an SEO-optimized, 500-word blog post for Elimuhub about '{query}'. "
     f"Use these article summaries as background:\n{summaries_text}"
